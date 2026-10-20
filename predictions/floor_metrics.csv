@@ -1,0 +1,2 @@
+model,n_estimators,max_depth,learning_rate,validation_accuracy_seed42,validation_macro_f1_seed42,validation_rows,misclassified_rows
+XGBoost,300,6,0.1,0.9813207050776112,0.9821806632454407,3801,71
