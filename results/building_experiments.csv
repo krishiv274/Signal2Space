@@ -1,0 +1,5 @@
+model,input,accuracy,macro_f1
+RF,A,1.0,1.0
+RF,B,1.0,1.0
+XGB,A,0.9997,0.9997
+XGB,B,0.9997,0.9997
