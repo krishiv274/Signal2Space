@@ -1,0 +1,4 @@
+split,model_config,n_estimators,max_depth,min_samples_leaf,accuracy,macro_f1,n_rows
+internal_validation,baseline,100,,1,0.9994807892004154,0.99949743956304,3852
+internal_validation,tuned,100,,1,0.9994807892004154,0.99949743956304,3852
+heldout_validation,tuned,100,,1,0.9972997299729973,0.9971260556181184,1111
