@@ -1,0 +1,4 @@
+split,model_config,n_estimators,max_depth,min_samples_leaf,max_features,mae_LONGITUDE_m,mae_LATITUDE_m,mean_euclidean_error_m,median_euclidean_error_m,n_rows
+internal_validation,baseline,100,,1,1.0,6.416406771850316,5.359463457629106,9.256109293649942,6.50829878676246,3852
+internal_validation,tuned,150,,1,0.5,5.914233881582704,5.060706429371585,8.578615765920034,6.306672414212099,3852
+heldout_validation,tuned,150,,1,0.5,8.096593750016021,6.806425543818002,11.583570677657631,7.488385035690064,1111
