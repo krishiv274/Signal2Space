@@ -1,4 +1,4 @@
-split,model_config,n_estimators,max_depth,min_samples_leaf,max_features,mae_LONGITUDE_m,mae_LATITUDE_m,mean_euclidean_error_m,median_euclidean_error_m,n_rows
-internal_validation,baseline,100,,1,1.0,6.416406771850316,5.359463457629106,9.256109293649942,6.50829878676246,3852
-internal_validation,tuned,150,,1,0.5,5.914233881582704,5.060706429371585,8.578615765920034,6.306672414212099,3852
-heldout_validation,tuned,150,,1,0.5,8.096593750016021,6.806425543818002,11.583570677657631,7.488385035690064,1111
+split,model_family,coordinate_unit_basis,model_config,n_estimators,max_depth,min_samples_leaf,max_features,mae_LONGITUDE_coordinate_units,mae_LATITUDE_coordinate_units,mean_euclidean_error_coordinate_units,median_euclidean_error_coordinate_units,n_rows
+internal_validation,RandomForestRegressor,dataset coordinate units; physical unit and CRS unverified,baseline,100,,1,1.0,6.416406771850294,5.359463457615324,9.256109293636703,6.50829878676246,3852
+internal_validation,RandomForestRegressor,dataset coordinate units; physical unit and CRS unverified,tuned,150,,1,0.5,5.9142338815826925,5.060706429374487,8.578615765911437,6.30667241347612,3852
+heldout_validation,RandomForestRegressor,dataset coordinate units; physical unit and CRS unverified,tuned,150,,1,0.5,8.096593750016016,6.80642554387752,11.583570677705671,7.488385036483196,1111
