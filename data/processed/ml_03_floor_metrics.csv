@@ -1,0 +1,4 @@
+split,model_config,n_estimators,max_depth,min_samples_leaf,max_features,accuracy,macro_f1,n_rows
+internal_validation,baseline,100,,1,sqrt,0.9620976116303219,0.9657771270907058,3852
+internal_validation,tuned,150,,1,sqrt,0.9641744548286605,0.9678247915518107,3852
+heldout_validation,tuned,150,,1,sqrt,0.8892889288928892,0.8726553528255208,1111
