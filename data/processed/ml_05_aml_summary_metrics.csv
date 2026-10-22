@@ -1,0 +1,7 @@
+split,task,model_config,accuracy,macro_f1,n_rows,coordinate_unit,mae_longitude,mae_latitude,mean_euclidean_error,median_euclidean_error
+internal_validation,building,RandomForestClassifier; n_estimators=100; max_depth=None; min_samples_leaf=1,0.9994807892004154,0.99949743956304,3852,,,,,
+internal_validation,floor,RandomForestClassifier; n_estimators=150; max_depth=None; min_samples_leaf=1; max_features=sqrt,0.9641744548286605,0.9678247915518107,3852,,,,,
+internal_validation,coordinate,model_family=RandomForestRegressor; n_estimators=150; max_depth=None; min_samples_leaf=1; max_features=0.5,,,3852,metre,5.9142338815827085,5.06070642937908,8.578615765926688,6.3066724138438905
+heldout_validation,building,RandomForestClassifier; n_estimators=100; max_depth=None; min_samples_leaf=1,0.9972997299729973,0.9971260556181184,1111,,,,,
+heldout_validation,floor,RandomForestClassifier; n_estimators=150; max_depth=None; min_samples_leaf=1; max_features=sqrt,0.8892889288928892,0.8726553528255208,1111,,,,,
+heldout_validation,coordinate,model_family=RandomForestRegressor; n_estimators=150; max_depth=None; min_samples_leaf=1; max_features=0.5,,,1111,metre,8.096593750016012,6.806425543910213,11.58357067772277,7.488385036483196
