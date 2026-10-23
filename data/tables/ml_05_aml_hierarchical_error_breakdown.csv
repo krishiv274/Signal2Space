@@ -1,0 +1,9 @@
+split,hierarchy_outcome,n_rows,proportion,mean_coordinate_error,median_coordinate_error,coordinate_unit
+internal_validation,both_correct,3714,0.9641744548286605,8.284823919607083,6.1532895455696615,metre
+internal_validation,building_correct_floor_wrong,136,0.035306334371754934,15.230474834469035,11.605900170064,metre
+internal_validation,building_wrong_floor_correct,0,0.0,,,metre
+internal_validation,both_wrong,2,0.0005192107995846313,101.82365772787219,101.82365772787219,metre
+heldout_validation,both_correct,986,0.8874887488748875,10.004770439397799,6.936435995632733,metre
+heldout_validation,building_correct_floor_wrong,122,0.10981098109810981,23.270388946956704,15.192995476138623,metre
+heldout_validation,building_wrong_floor_correct,2,0.0018001800180018,44.30942249302132,44.30942249302132,metre
+heldout_validation,both_wrong,1,0.0009000900090009,77.03707314906673,77.03707314906673,metre

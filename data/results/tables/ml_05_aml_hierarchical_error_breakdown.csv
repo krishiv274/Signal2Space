@@ -1,9 +1,0 @@
-split,hierarchy_outcome,n_rows,proportion,mean_coordinate_error,median_coordinate_error,coordinate_unit
-internal_validation,both_correct,3714,0.9641744548286605,8.28482391961275,6.1532895455696615,metre
-internal_validation,building_correct_floor_wrong,136,0.035306334371754934,15.23047483448701,11.605900170064835,metre
-internal_validation,building_wrong_floor_correct,0,0.0,,,metre
-internal_validation,both_wrong,2,0.0005192107995846313,101.82365772787387,101.82365772787387,metre
-heldout_validation,both_correct,986,0.8874887488748875,10.00477043938588,6.936435995475821,metre
-heldout_validation,building_correct_floor_wrong,122,0.10981098109810981,23.27038894704647,15.192995476165247,metre
-heldout_validation,building_wrong_floor_correct,2,0.0018001800180018,44.30942249223192,44.30942249223192,metre
-heldout_validation,both_wrong,1,0.0009000900090009,77.03707315042598,77.03707315042598,metre
