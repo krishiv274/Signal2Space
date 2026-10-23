@@ -1,4 +1,0 @@
-split,model_family,coordinate_unit_basis,model_config,n_estimators,max_depth,min_samples_leaf,max_features,mae_LONGITUDE_coordinate_units,mae_LATITUDE_coordinate_units,mean_euclidean_error_coordinate_units,median_euclidean_error_coordinate_units,n_rows
-internal_validation,RandomForestRegressor,EPSG:3857 projected metres (Web/Pseudo-Mercator),baseline,100,,1,1.0,6.416406771850305,5.359463457613632,9.256109293623302,6.50829878676246,3852
-internal_validation,RandomForestRegressor,EPSG:3857 projected metres (Web/Pseudo-Mercator),tuned,150,,1,0.5,5.914233881582713,5.06070642937908,8.578615765926692,6.30667241384411,3852
-heldout_validation,RandomForestRegressor,EPSG:3857 projected metres (Web/Pseudo-Mercator),tuned,150,,1,0.5,8.096593750016016,6.806425543910213,11.583570677722772,7.488385036483196,1111
