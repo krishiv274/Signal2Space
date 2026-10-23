@@ -1,2 +1,0 @@
-model,n_estimators,max_depth,learning_rate,seeds,mean_accuracy,std_accuracy,mean_macro_f1,std_macro_f1
-XGBoost,300,6,0.1,"21,42,123",0.9822853635008331,0.0008457117215638666,0.983642128604127,0.0012689973631258955
