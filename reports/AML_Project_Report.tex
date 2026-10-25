@@ -47,7 +47,12 @@ indoor positioning, Wi-Fi fingerprinting, RSSI, Random Forest, classification, c
 \section{Introduction}
 Indoor satellite positioning is often unavailable or unreliable, while Wi-Fi access points provide signal observations that vary across locations. A Wi-Fi fingerprint is a vector of received signal strengths measured from a set of access points. The project treats each row as a fingerprint and predicts three related location targets: building identity, floor identity, and two-dimensional position.
 
-The implemented system uses a shared, deterministic feature preparation pipeline followed by three independent tabular estimators. This structure follows the project specification: absent access points are represented consistently, signal-density summaries are added, classification predicts building and floor, and regression predicts coordinates. The UJIIndoorLoc database was introduced for multi-building and multi-floor WLAN fingerprint-based localization research \cite{uci,torres2014}.
+\subsection{Related work}
+Wi-Fi fingerprinting compares a live RSSI vector with a radio map collected at known locations. Deterministic methods such as nearest-neighbor matching select the closest stored fingerprints, whereas probabilistic methods model the likelihood of signal observations at candidate locations. A controlled comparison by Dawes and Chin found that nearest-neighbor variants can perform well with reduced signal dimensions, while also showing that transient access points and signal variability affect accuracy; they emphasize that performance depends on the test environment \cite{dawes2011}. He and Chan review extensions that use spatial and temporal patterns or combine Wi-Fi with motion and other sensors to improve localization, at the cost of added data or sensing requirements \cite{hechan2016}.
+
+On UJIIndoorLoc, Song \emph{et al.} proposed CNNLoc, which combines a stacked autoencoder with a one-dimensional CNN for building and floor classification and coordinate estimation \cite{song2019}. This learned representation is a more complex alternative to direct fingerprint matching and conventional tabular models. The present study evaluates Random Forest models on an explicit engineered feature table and keeps building, floor, and coordinate predictions separate. Since this project does not test nearest-neighbor, probabilistic, or CNN baselines under the same split, the results establish performance for the selected pipeline only; they do not rank it against those published methods. Differences in partitions and metrics also prevent direct comparison of reported scores.
+
+The implemented system uses a shared, deterministic feature preparation pipeline followed by three independent tabular estimators. This structure follows the project specification: absent access points are represented consistently, signal-density summaries are added, classification predicts building and floor, and regression predicts coordinates. The UJIIndoorLoc database was introduced for multi-building and multi-floor WLAN fingerprint-based localization research \cite{torres2014,uci}.
 
 The central modeling question is: how well can a Wi-Fi fingerprint predict each location target under the supplied data partition when the transformations and model settings are learned without using the final held-out labels? The three prediction targets are evaluated separately because building class, floor code, and coordinates have different label types and error measures. Their predictions are then joined to describe whether their errors coincide on the same records.
 
@@ -237,7 +242,7 @@ The two-dimensional error is \(d_i=\sqrt{(x_i-\hat{x}_i)^2+(y_i-\hat{y}_i)^2}\);
 
 \section{Results}
 \subsection{Task-level performance}
-Table~\ref{tab:results} reports internal-validation results used during development and final supplied held-out results. The held-out column is the main performance estimate; the internal-validation column reflects the model-selection data and is expected to be more favorable because candidates were ranked there. Table~\ref{tab:baseline-tuned} makes the baseline-to-tuned change explicit. The supplied held-out evaluation is performed only after the selected configuration is frozen.
+Table~\ref{tab:results} reports internal-validation results used during development and final supplied held-out results. The held-out column is the main performance estimate; the internal-validation column reflects the model-selection data and is expected to be more favorable because candidates were ranked there. The supplied held-out evaluation is performed only after the selected configuration is frozen.
 
 \begin{table}[!t]
 \centering
@@ -260,24 +265,7 @@ Median Euclidean error & 6.31 & 7.49 & same configuration \\
 \end{tabularx}
 \end{table}
 
-\begin{table}[!t]
-\centering
-\caption{Baseline, selected internal-validation, and final held-out metrics.}
-\label{tab:baseline-tuned}
-\begin{tabularx}{\columnwidth}{p{0.22\columnwidth} p{0.23\columnwidth} p{0.22\columnwidth} X}
-\toprule
-Task and metric & Baseline internal validation & Selected internal validation & Selected held-out evaluation \\
-\midrule
-Building accuracy & 99.95\% & 99.95\% & 99.73\% \\
-Building macro F1 & 99.95\% & 99.95\% & 99.71\% \\
-Floor accuracy & 96.21\% & 96.42\% & 88.93\% \\
-Floor macro F1 & 96.58\% & 96.78\% & 87.27\% \\
-Coordinate mean Euclidean error & 9.26 & 8.58 & 11.58 \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-For building, tuning retains the baseline setting and scores are almost unchanged on the supplied partition. Floor tuning yields a modest improvement on internal validation; the difference between internal and held-out performance is larger, especially for floor classification. For regression, the selected configuration lowers mean Euclidean error by 0.68 coordinate units on internal validation compared with the baseline, while held-out error is higher than internal validation. The comparison is descriptive: the held-out data was not used to choose between configurations.
+For building, tuning retains the baseline setting. Floor accuracy rises from 96.21\% to 96.42\% on internal validation, while coordinate mean Euclidean error falls from 9.26 to 8.58 units. Held-out floor and coordinate results are lower than these selected internal-validation scores; the held-out data was not used to choose configurations.
 
 \begin{figure}[!t]
   \centering
@@ -365,6 +353,15 @@ The pipeline combines train-only RSSI preprocessing with independent Random Fore
 
 \small
 \begin{thebibliography}{9}
+\bibitem{dawes2011}
+B. Dawes and K.-W. Chin, ``A comparison of deterministic and probabilistic methods for indoor localization,'' \emph{Journal of Systems and Software}, vol. 84, no. 3, pp. 442--451, Mar. 2011, doi: \href{https://doi.org/10.1016/j.jss.2010.11.888}{10.1016/j.jss.2010.11.888}.
+
+\bibitem{hechan2016}
+S. He and S.-H. G. Chan, ``Wi-Fi fingerprint-based indoor positioning: Recent advances and comparisons,'' \emph{IEEE Communications Surveys \& Tutorials}, vol. 18, no. 1, pp. 466--490, 1st Quart. 2016, doi: \href{https://doi.org/10.1109/COMST.2015.2464084}{10.1109/COMST.2015.2464084}.
+
+\bibitem{song2019}
+X. Song, X. Fan, C. Xiang, Q. Ye, L. Liu, Z. Wang, X. He, and G. Fang, ``A novel convolutional neural network based indoor localization framework with WiFi fingerprinting,'' \emph{IEEE Access}, vol. 7, pp. 110698--110709, 2019, doi: \href{https://doi.org/10.1109/ACCESS.2019.2933921}{10.1109/ACCESS.2019.2933921}.
+
 \bibitem{torres2014}
 J. Torres-Sospedra, R. Montoliu, A. Mart\'{i}nez-Us\'{o}, J. P. Avariento, T. J. Arnau, M. Benedito-Bordonau, and J. Huerta,
 ``UJIIndoorLoc: A new multi-building and multi-floor database for WLAN fingerprint-based indoor localization problems,''
