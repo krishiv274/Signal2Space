@@ -2,14 +2,14 @@
 
 ## Indoor positioning with Wi-Fi signals
 
-Signal2Space predicts a device's building, floor, and two-dimensional position from Wi-Fi access point signal strength. The active implementation is the Phase 1 AML pipeline using shared feature preparation, Random Forest classification, coordinate regression, and integrated evaluation. Phase 2 deep learning is planned; its notebooks are placeholders and have not been implemented.
+Signal2Space predicts a device's building, floor, and two-dimensional position from Wi-Fi access point signal strength. Phase 1 is an AML pipeline: shared feature preparation, Random Forest classification and coordinate regression, and integrated evaluation. Phase 2 is a PyTorch deep-learning pipeline: a shared-trunk multitask network plus three single-task ablations, evaluated on the same held-out partition as AML and compared with it directly.
 
 ## Current status
 
 - **Machine Learning:** Implemented and rerun end to end. Processed datasets, model result tables, and figures are kept separately under `data/processed/`, `data/tables/`, and `data/figures/`.
 - **Current held-out results:** Building accuracy 99.73%; floor accuracy 88.93%; coordinate MAE 8.10 longitude-axis units and 6.81 latitude-axis units; mean Euclidean error 11.58 coordinate units. The coordinate notebook labels these units as EPSG:3857 metres, but the repository does not include authoritative CRS metadata; confirm the coordinate reference before treating that label as formally established.
 - **Interpretation:** Results use the supplied UJIIndoorLoc train/validation partition and an internal group split. Fingerprint overlap and repeated coordinate values may occur across partitions, so these scores do not establish performance on unseen fingerprints or unseen positions.
-- **Deep learning:** Planned.
+- **Deep learning:** Implemented in `src/signal2space_dl/` and `Deep Learning Pipeline/DL_01`–`DL_05`, and run end to end (seed 42, CPU). The multitask model's held-out results are building 99.91%, floor 89.56% and mean Euclidean error 12.00. The coordinate-only DL model has a mean error of 10.51 against AML's 11.58. See [Deep learning pipeline](#deep-learning-pipeline-phase-2) and [`docs/DL_PIPELINE.md`](docs/DL_PIPELINE.md).
 
 The dataset contains 19,937 training/reference records and 1,111 validation/test records. It has 520 WAP signal fields; `100` means the access point was not detected. [UCI UJIIndoorLoc dataset documentation](https://archive.ics.uci.edu/dataset/310/ujiindoorloc)
 
@@ -26,7 +26,7 @@ flowchart TB
     B3 --> B4["ML_04_coordinate_regression.ipynb"]
     B4 --> B5["ML_05_integration_evaluation.ipynb"]
 
-    A --> C["Deep Learning Pipeline/<br/>Planned - Placeholder Notebooks"]
+    A --> C["Deep Learning Pipeline/<br/>PyTorch multitask pipeline"]
     C --> C1["DL_01_data_preparation.ipynb"]
     C1 --> C2["DL_02_building_prediction.ipynb"]
     C2 --> C3["DL_03_floor_prediction.ipynb"]
@@ -49,6 +49,13 @@ flowchart TB
 
     A --> E["README.md"]
     A --> F["requirements.txt<br/>AML/Runtime Lock"]
+    A --> G["requirements-dl.txt<br/>AML lock + torch"]
+    A --> H["src/signal2space_dl/<br/>DL package"]
+    A --> I["scripts/run_dl_pipeline.py<br/>DL command line"]
+    A --> J["models/<br/>Frozen DL checkpoints"]
+    A --> K["docs/<br/>DL reference, team plan, viva scripts"]
+    A --> L["tests/<br/>DL unit tests"]
+    A --> M["handoff/<br/>Member handoff ZIPs + project handoff PDF"]
 
     class A root
     class B,B1,B2,B3,B4,B5 ml
@@ -125,6 +132,68 @@ The held-out rows may share Wi-Fi fingerprints or repeated two-dimensional coord
 
 These scores are specific to the supplied split. The dataset partition does not guarantee that fingerprints or two-dimensional coordinates are unique across train and evaluation data.
 
+## Deep learning pipeline (Phase 2)
+
+The DL pipeline reads the raw CSVs directly. It validates the schema and recreates **the same internal group split as ML_01**: the internal-validation `ROW_ID`s are verified to be identical. It fits all preprocessing on internal-train rows only and keeps `validationData.csv` held out until every checkpoint is frozen.
+
+Each fingerprint becomes 1,040 inputs: 520 standardised RSSI values plus 520 presence flags. The undetected sentinel `100` is filled below the observed range, and the presence flag records that the access point was missing.
+
+The network is a shared-trunk MLP (1040 → 512 → 256) with three heads:
+
+- **building:** 3 classes
+- **floor:** 5 classes
+- **coordinate:** longitude and latitude
+
+The loss is `CE(building) + CE(floor) + Huber(coordinates / 10)`. Training uses AdamW with early stopping on the internal-validation loss. Each single-task ablation uses the same network with one head.
+
+| Notebook | Runs | Main outputs |
+|---|---|---|
+| `DL_01_data_preparation` | Schema checks, split, train-only preprocessor | `data/processed/dl_01_*`, `data/tables/dl_01_*` |
+| `DL_02_building_prediction` | Building-only model | `models/dl_02_*`, `data/tables/dl_02_*`, `data/figures/dl_02_*` |
+| `DL_03_floor_prediction` | Floor-only model | `models/dl_03_*`, `dl_03_*` tables and figures |
+| `DL_04_coordinate_prediction` | Coordinate-only model | `models/dl_04_*`, `dl_04_*` tables and figures |
+| `DL_05_multitask_integration_evaluation` | Multitask model, comparison with AML, bootstrap, hierarchy | `models/dl_05_*`, `dl_05_*` tables and figures |
+
+### Held-out comparison (same 1,111 rows, same metrics)
+
+| Held-out | AML Random Forest | DL single-task | DL multitask |
+|---|---:|---:|---:|
+| Building accuracy | 99.73% | 99.82% | 99.91% |
+| Floor accuracy / macro F1 | 88.93% / 87.27% | 89.92% / 88.43% | 89.56% / 88.15% |
+| Coordinate MAE, longitude / latitude | 8.10 / 6.81 | 7.24 / 6.11 | 8.62 / 6.72 |
+| Mean / median Euclidean error | 11.58 / 7.49 | 10.51 / 8.13 | 12.00 / 9.53 |
+| Joint building + floor correct | 986 / 1,111 | — | 995 / 1,111 |
+
+The 95% confidence intervals come from a paired bootstrap over the same held-out rows (DL minus AML).
+
+- **Coordinate-only DL vs AML:** mean error is lower by 1.08 units (CI [−1.78, −0.37]). Its median error is higher than AML's.
+- **Building and floor:** the differences are within noise. For example, multitask floor accuracy is +0.63 pp with CI [−0.72, +1.89].
+- **Multitask coordinates:** sharing the trunk made coordinate error worse than the coordinate-only model.
+
+All models were frozen before held-out scoring, so the held-out data was not used to pick a model. Coordinates are in dataset units; the EPSG:3857 label is unconfirmed.
+
+![DL vs AML held-out comparison](data/figures/dl_05_heldout_model_comparison.png)
+
+### Run the DL pipeline
+
+```bash
+python -m pip install -r requirements-dl.txt
+```
+
+```bash
+python -m pytest -q tests
+```
+
+```bash
+python scripts/run_dl_pipeline.py all
+```
+
+`all` takes about 4 minutes on a 4-core CPU. Use `evaluate` to re-score the committed checkpoints without retraining. You can also run the notebooks DL_01 through DL_05 in order; each has `RETRAIN = False` by default, so it reuses the checkpoints.
+
+### Team handoff
+
+The team plan, issues, branches and five member handoff ZIPs are listed in [`docs/TEAM_PLAN.md`](docs/TEAM_PLAN.md). The viva recording scripts are in [`docs/VIVA_SCRIPTS.md`](docs/VIVA_SCRIPTS.md).
+
 ## Report figures
 
 ### Held-out building and floor confusion matrices
@@ -160,4 +229,12 @@ python -m pip install -r requirements.txt
 jupyter notebook
 ```
 
-The lock includes packages required by the active AML notebooks and Jupyter execution. XGBoost and PyTorch are not included because the current AML implementation does not use them. Add Phase 2 dependencies when the DL pipeline is implemented.
+The lock includes packages required by the active AML notebooks and Jupyter execution. XGBoost is not used.
+
+For the DL pipeline, install `requirements-dl.txt`. It includes the unchanged AML lock (`-r requirements.txt`) and adds `torch==2.15.0` and `pytest==9.2.0`. The DL run was verified on Python 3.13 (Linux, CPU); Python 3.14 on macOS with torch is pending verification by the integration owner.
+
+On Linux, install the CPU-only torch wheel first to avoid downloading about 3 GB of CUDA libraries:
+
+```bash
+python -m pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+```
