@@ -16,7 +16,7 @@ Placeholders in [square brackets] are results from your own DL-1 to DL-4 work. F
 | 3:30–4:30 (60 s) | Results vs AML | Multitask: 99.91% building, 89.56% floor, 995 of 1,111 rows with both correct, against 986 for AML. The coordinate-only network is the only resolved win: mean error 10.51 against 11.58. Sharing the trunk hurt coordinates. | `DL_05` notebook comparison table; `dl_05_heldout_model_comparison.png`; `dl_05_vs_aml_paired_bootstrap.csv` |
 | 4:30–4:55 (25 s) | Limits and close | These hold for the supplied split only. The CRS is unconfirmed and we used one seed. Next steps are a multi-seed run and tuning the coordinate weight on internal validation. | `docs/DL_PIPELINE.md` §9 |
 
-**One-line summary of your contribution:** Review, verify and merge the integration PR {{PR}}, which holds the implemented DL pipeline (package, notebooks, full-run outputs, docs and handoff). Verify it on the team's macOS / Python 3.14 environment and preserve existing local work. It connects to the full project as one stage of a single pipeline: DL_01 data, then DL_02–DL_04 heads, then DL_05 comparison with AML.
+**One-line summary of your contribution:** Review, verify and merge the integration PR #7, which holds the implemented DL pipeline (package, notebooks, full-run outputs, docs and handoff). Verify it on the team's macOS / Python 3.14 environment and preserve existing local work. It connects to the full project as one stage of a single pipeline: DL_01 data, then DL_02–DL_04 heads, then DL_05 comparison with AML.
 
 **Recording tips:** use 1080p screen capture and zoom the editor to about 125%. Open every file and tab before you start. Rehearse once with a timer and cut words rather than talking faster.
 
