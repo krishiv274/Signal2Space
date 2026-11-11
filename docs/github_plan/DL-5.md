@@ -1,8 +1,8 @@
 **ID:** DL-5 · **Step 3:** Final integration (after DL-1 to DL-4 merge)
 **Owner:** Krishiv (@krishiv274) · **Branch:** `dl/05-integration-krishiv274` · **Effort (estimate):** about 4–6 hours
-**Blocked by:** {{DL-1}} (DL-1), {{DL-2}} (DL-2), {{DL-3}} (DL-3), {{DL-4}} (DL-4)
+**Blocked by:** #12 (DL-1), #9 (DL-2), #10 (DL-3), #11 (DL-4)
 **When to start:** Start after DL-1 to DL-4 are merged
-**Tracker:** {{TRACKER}}
+**Tracker:** #6
 
 ## Goal
 Validate the combined work on `main`, keep every results statement consistent, and produce the final report material.
@@ -28,7 +28,7 @@ Validate the combined work on `main`, keep every results statement consistent, a
 - [ ] Results are claimed only for the supplied split, and all caveats are retained.
 
 ## Workflow
-Branch `dl/05-integration-krishiv274` from `main` → commit referencing this issue → push → open PR into `main` with `Closes #<this issue>` → request review from @krishiv274 and the four members.
+Work on `dl/05-integration-krishiv274` (create it from the updated `main`). Commit with `DL-5: ... (refs #<this issue>)`, then push. Open a PR into `main` with `Closes #<this issue>`, and request review from the four members.
 Full step-by-step instructions: `Signal2Space_DL_handoff_1_Krishiv_krishiv274.zip` (in `handoff/`) and `docs/TEAM_PLAN.md`.
 
 Planner: https://app.notion.com/p/415e7fb36c6881d9b60effca159d11d5

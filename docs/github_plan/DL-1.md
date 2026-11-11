@@ -1,8 +1,8 @@
-**ID:** DL-1 · **Step 2:** Parallel member work (after DL-0 merges; DL-1 merges first)
+**ID:** DL-1 · **Step 2:** Parallel member work (start now on pre-created branches; PRs after DL-0 merges; DL-1 merges first)
 **Owner:** Gargi (@gigabyte2024) · **Branch:** `dl/01-data-audit-gigabyte2024` · **Effort (estimate):** about 4–6 hours
-**Blocked by:** {{DL-0}} (DL-0)
-**When to start:** Start after DL-0 is merged; merge first in step 2
-**Tracker:** {{TRACKER}}
+**Blocked by:** #8 (DL-0)
+**When to start:** Start now on your pre-created branch; open the PR into main after DL-0 merges; merges first in step 2
+**Tracker:** #6
 
 ## Goal
 Prove, with automated tests on the real CSVs, that the DL split and preprocessing are leakage-free and match AML. Document the audit.
@@ -29,7 +29,7 @@ Prove, with automated tests on the real CSVs, that the DL split and preprocessin
 - [ ] The overlap counts are reported with a one-sentence interpretation.
 
 ## Workflow
-Branch `dl/01-data-audit-gigabyte2024` from `main` → commit referencing this issue → push → open PR into `main` with `Closes #<this issue>` → request review from @krishiv274.
+Work on `dl/01-data-audit-gigabyte2024` (pre-created from the integration branch). Commit with `DL-1: ... (refs #<this issue>)`, then push. Open a PR into `main` with `Closes #<this issue>` after DL-0 merges, and request review from @krishiv274.
 Full step-by-step instructions: `Signal2Space_DL_handoff_2_Gargi_gigabyte2024.zip` (in `handoff/`) and `docs/TEAM_PLAN.md`.
 
 Planner: https://app.notion.com/p/415e7fb36c6881d9b60effca159d11d5

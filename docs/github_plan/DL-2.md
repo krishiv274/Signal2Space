@@ -1,8 +1,8 @@
-**ID:** DL-2 · **Step 2:** Parallel member work (after DL-0 merges; DL-1 merges first)
+**ID:** DL-2 · **Step 2:** Parallel member work (start now on pre-created branches; PRs after DL-0 merges; DL-1 merges first)
 **Owner:** Agrima (@slayplayagrima) · **Branch:** `dl/02-building-robustness-slayplayagrima` · **Effort (estimate):** about 4–6 hours
-**Blocked by:** {{DL-0}} (DL-0)
-**When to start:** Start after DL-0 is merged; parallel with DL-1, DL-3 and DL-4; merge after DL-1
-**Tracker:** {{TRACKER}}
+**Blocked by:** #8 (DL-0)
+**When to start:** Start now on your pre-created branch, in parallel with DL-1, DL-3 and DL-4; open the PR after DL-0 merges; merge after DL-1
+**Tracker:** #6
 
 ## Goal
 Explain the building model's remaining errors and measure how accuracy degrades when detected access points go missing.
@@ -29,7 +29,7 @@ Explain the building model's remaining errors and measure how accuracy degrades 
 - [ ] `pytest` passes and DL_02 runs top to bottom without errors.
 
 ## Workflow
-Branch `dl/02-building-robustness-slayplayagrima` from `main` → commit referencing this issue → push → open PR into `main` with `Closes #<this issue>` → request review from @krishiv274.
+Work on `dl/02-building-robustness-slayplayagrima` (pre-created from the integration branch). Commit with `DL-2: ... (refs #<this issue>)`, then push. Open a PR into `main` with `Closes #<this issue>` after DL-0 merges, and request review from @krishiv274.
 Full step-by-step instructions: `Signal2Space_DL_handoff_3_Agrima_slayplayagrima.zip` (in `handoff/`) and `docs/TEAM_PLAN.md`.
 
 Planner: https://app.notion.com/p/415e7fb36c6881d9b60effca159d11d5

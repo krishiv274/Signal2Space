@@ -2,37 +2,35 @@
 **Owner:** Krishiv (@krishiv274) · **Branch:** `claude/peaceful-shannon-o1t6j8` · **Effort (estimate):** about 2–3 hours
 **Blocked by:** None — start now
 **When to start:** Start now
-**Tracker:** {{TRACKER}}
+**Tracker:** #6
 
 ## Goal
-Publish and merge the implemented DL pipeline (package, notebooks, full-run outputs and docs) after verifying it on the team's macOS / Python 3.14 environment. Preserve existing local work.
+Review, verify and merge the integration PR #7, which holds the implemented DL pipeline (package, notebooks, full-run outputs, docs and handoff). Verify it on the team's macOS / Python 3.14 environment and preserve existing local work.
 
 ## Scope
-- Publish the integration branch: push `claude/peaceful-shannon-o1t6j8`. If it is not already on GitHub, fetch it from `signal2space-dl-integration.bundle` first (steps in your handoff README).
-- Preserve local work before checking out the branch. Commit the modified `reports/AML_Project_PPT .pptx` on its own branch (`docs/aml-ppt-update-krishiv274`).
+- Before checking out the branch, preserve local work: commit the modified `reports/AML_Project_PPT .pptx` on its own branch (`docs/aml-ppt-update-krishiv274`).
 - Keep the local untracked `src/signal2space_dl/pipeline.py` and diff it against the new modules (`data.py`, `model.py`, `train.py`, `evaluate.py`). Port anything it does that the package does not, as a separate commit. Do not delete it unreviewed.
 - Install `requirements-dl.txt` on Python 3.14 (macOS). Run `pytest`, `python scripts/run_dl_pipeline.py evaluate` and the five DL notebooks.
-- Open the PR into `main`, request review from all four members, address comments and merge.
-- Run `scripts/create_github_plan.sh` (needs the `gh` CLI) to create the labels, the DL-1 to DL-6 issues and the member branches.
+- Review PR #7 together with the four members' reviews, and address any comments.
+- Merge with **Create a merge commit**, not squash: the four member branches were created from this branch, and a squash would make their PRs show the integration commits again.
 
 ## Inputs
-- Integration branch or bundle
+- PR #7 (branch `claude/peaceful-shannon-o1t6j8`)
 - Local `src/signal2space_dl/pipeline.py` and modified PPTX (on your Mac only)
 
 ## Outputs
-- Merged integration PR
+- PR #7 merged into `main` with a merge commit
 - PPTX change preserved on its own branch
-- GitHub issues and branches created
 - Note in the PR on whether `evaluate` reproduced the committed metrics on macOS
 
 ## Acceptance criteria
 - [ ] `python -m pytest -q tests` passes on macOS with Python 3.14.
 - [ ] `python scripts/run_dl_pipeline.py evaluate` reproduces the held-out rows of `data/tables/dl_05_model_comparison.csv` to 4 decimal places, or the differences are recorded in the PR.
 - [ ] The local `pipeline.py` and PPTX changes are preserved and not overwritten.
-- [ ] The PR is merged into `main`, and the DL-1 to DL-6 issues and branches exist.
+- [ ] PR #7 is merged into `main` with a merge commit.
 
 ## Workflow
-Branch `claude/peaceful-shannon-o1t6j8` from `main` → commit referencing this issue → push → open PR into `main` with `Closes #<this issue>` → request review from @krishiv274 and the four members.
+PR #7 is already open from `claude/peaceful-shannon-o1t6j8`. Review it, verify it locally, push any fix commits to that branch, then merge with **Create a merge commit**.
 Full step-by-step instructions: `Signal2Space_DL_handoff_1_Krishiv_krishiv274.zip` (in `handoff/`) and `docs/TEAM_PLAN.md`.
 
 Planner: https://app.notion.com/p/415e7fb36c6881d9b60effca159d11d5

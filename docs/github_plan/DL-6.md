@@ -1,8 +1,8 @@
 **ID:** DL-6 · **Step 4:** Viva recordings (after DL-5)
 **Owner:** Krishiv (@krishiv274) · **Branch:** `(no branch; links are posted as issue comments)` · **Effort (estimate):** about 1–2 hours per member
-**Blocked by:** {{DL-5}} (DL-5)
+**Blocked by:** #13 (DL-5)
 **When to start:** Rehearse any time; record after DL-5 so the numbers are final
-**Tracker:** {{TRACKER}}
+**Tracker:** #6
 
 ## Goal
 Each member records a viva of at most five minutes using `docs/VIVA_SCRIPTS.md`. Krishiv coordinates and checks that every recording is consistent with the final results.
@@ -25,7 +25,7 @@ Each member records a viva of at most five minutes using `docs/VIVA_SCRIPTS.md`.
 - [ ] Checklist: Krishiv ☐, Gargi ☐, Agrima ☐, Abhiman ☐, Bhawana ☐.
 
 ## Workflow
-Branch `(no branch; links are posted as issue comments)` from `main` → commit referencing this issue → push → open PR into `main` with `Closes #<this issue>` → request review from @krishiv274 and the four members.
+No branch. Each member posts their recording link as a comment on this issue.
 Full step-by-step instructions: `Signal2Space_DL_handoff_1_Krishiv_krishiv274.zip` (in `handoff/`) and `docs/TEAM_PLAN.md`.
 
 Planner: https://app.notion.com/p/415e7fb36c6881d9b60effca159d11d5

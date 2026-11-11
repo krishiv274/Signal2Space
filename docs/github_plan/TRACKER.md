@@ -6,7 +6,7 @@ Tracking issue for Signal2Space Phase 2 (deep learning).
 | Step | Issues | Starts when |
 |---|---|---|
 | 1 | {{DL-0}} | Integrate the implemented pipeline (start now) |
-| 2 | {{DL-1}}, {{DL-2}}, {{DL-3}}, {{DL-4}} | Parallel member work (after DL-0 merges; DL-1 merges first) |
+| 2 | {{DL-1}}, {{DL-2}}, {{DL-3}}, {{DL-4}} | Parallel member work (start now on pre-created branches; PRs after DL-0 merges; DL-1 merges first) |
 | 3 | {{DL-5}} | Final integration (after DL-1 to DL-4 merge) |
 | 4 | {{DL-6}} | Viva recordings (after DL-5) |
 
