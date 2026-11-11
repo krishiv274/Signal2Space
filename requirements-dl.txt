@@ -1,0 +1,16 @@
+# Deep-learning (Phase 2) dependencies.
+#
+# This file layers PyTorch on top of the unchanged AML lock, so installing it keeps every
+# AML package at its locked version:
+#
+#     python -m pip install -r requirements-dl.txt
+#
+# The AML lock (requirements.txt) was captured on Python 3.14.2 / macOS. The DL pipeline
+# was run end to end with these exact pins on Python 3.13 / Linux (CPU), see
+# docs/DL_PIPELINE.md "Verified environment". On Linux, the default PyPI torch wheel pulls
+# CUDA runtime libraries (~3 GB); a CPU-only wheel is available with
+#     python -m pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu
+# installed before this file. macOS wheels are CPU/MPS only and need no extra index.
+-r requirements.txt
+torch==2.15.0
+pytest==9.2.0
