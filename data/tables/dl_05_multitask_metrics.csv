@@ -1,0 +1,7 @@
+model,experiment,split,task,n_rows,selected_epoch,checkpoint_sha256,accuracy,macro_f1,balanced_accuracy,n_correct,mae_longitude,mae_latitude,mean_euclidean_error,median_euclidean_error,p75_euclidean_error,p90_euclidean_error,rmse_euclidean,coordinate_unit
+DL multitask,multitask,internal_validation,building,3852,48,5f5df5088f8d,0.9992211838006231,0.9992467634196345,0.9994068801897983,3849.0,,,,,,,,
+DL multitask,multitask,internal_validation,floor,3852,48,5f5df5088f8d,0.9691069574247144,0.9709314423416979,0.9699466047310995,3733.0,,,,,,,,
+DL multitask,multitask,internal_validation,coordinate,3852,48,5f5df5088f8d,,,,,7.165717183485942,4.87555592300792,9.492399966531554,7.838229229890468,12.219877518110263,17.581631725890546,12.46704332894618,dataset coordinate units (EPSG:3857 metres per ML_04; CRS unconfirmed)
+DL multitask,multitask,heldout_validation,building,1111,48,5f5df5088f8d,0.9990999099909991,0.9988354937455887,0.998914223669924,1110.0,,,,,,,,
+DL multitask,multitask,heldout_validation,floor,1111,48,5f5df5088f8d,0.8955895589558955,0.8815311850173657,0.8700145347888165,995.0,,,,,,,,
+DL multitask,multitask,heldout_validation,coordinate,1111,48,5f5df5088f8d,,,,,8.617620029412686,6.718900966748065,12.001489344514605,9.528590788775142,15.649682711100503,23.705865340745838,15.018826056972589,dataset coordinate units (EPSG:3857 metres per ML_04; CRS unconfirmed)

@@ -1,0 +1,4 @@
+split,rows,n_features,building_0,building_1,building_2,floor_0,floor_1,floor_2,floor_3,floor_4
+internal_train,16085,1040,4177,4102,7806,3569,3892,3592,4170,862
+internal_validation,3852,1040,1072,1094,1686,800,1110,824,878,240
+heldout_validation,1111,1040,536,307,268,132,462,306,172,39

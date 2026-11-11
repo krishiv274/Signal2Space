@@ -1,0 +1,78 @@
+{
+ "comparison_rows": 18,
+ "aml_recomputed": {
+  "building_accuracy": 0.9972997299729973,
+  "floor_accuracy": 0.8892889288928892,
+  "mean_euclidean_error": 11.58357067768045,
+  "joint_building_floor_correct": 986
+ },
+ "paired_bootstrap": [
+  {
+   "model": "DL building_only",
+   "metric": "building_accuracy",
+   "dl": 0.9981998199819982,
+   "aml": 0.9972997299729973,
+   "dl_minus_aml": 0.0009000900090009,
+   "ci95_low": -0.0018001800180018,
+   "ci95_high": 0.0036228622862285,
+   "n_rows": 1111,
+   "n_bootstrap": 2000
+  },
+  {
+   "model": "DL floor_only",
+   "metric": "floor_accuracy",
+   "dl": 0.8991899189918992,
+   "aml": 0.8892889288928892,
+   "dl_minus_aml": 0.009900990099009901,
+   "ci95_low": -0.0036003600360036,
+   "ci95_high": 0.024302430243024302,
+   "n_rows": 1111,
+   "n_bootstrap": 2000
+  },
+  {
+   "model": "DL coordinate_only",
+   "metric": "mean_euclidean_error",
+   "dl": 10.506598810419208,
+   "aml": 11.58357067768045,
+   "dl_minus_aml": -1.0769718672612434,
+   "ci95_low": -1.7849643683775869,
+   "ci95_high": -0.37036126806454034,
+   "n_rows": 1111,
+   "n_bootstrap": 2000
+  },
+  {
+   "model": "DL multitask",
+   "metric": "building_accuracy",
+   "dl": 0.9990999099909991,
+   "aml": 0.9972997299729973,
+   "dl_minus_aml": 0.0018001800180018,
+   "ci95_low": -0.0018001800180018,
+   "ci95_high": 0.0054005400540054005,
+   "n_rows": 1111,
+   "n_bootstrap": 2000
+  },
+  {
+   "model": "DL multitask",
+   "metric": "floor_accuracy",
+   "dl": 0.8955895589558955,
+   "aml": 0.8892889288928892,
+   "dl_minus_aml": 0.0063006300630063005,
+   "ci95_low": -0.0072007200720072,
+   "ci95_high": 0.018901890189018902,
+   "n_rows": 1111,
+   "n_bootstrap": 2000
+  },
+  {
+   "model": "DL multitask",
+   "metric": "mean_euclidean_error",
+   "dl": 12.001489344514605,
+   "aml": 11.58357067768045,
+   "dl_minus_aml": 0.4179186668341541,
+   "ci95_low": -0.3312838174206759,
+   "ci95_high": 1.1638235951462885,
+   "n_rows": 1111,
+   "n_bootstrap": 2000
+  }
+ ],
+ "dl_multitask_joint_building_floor_correct": 995
+}

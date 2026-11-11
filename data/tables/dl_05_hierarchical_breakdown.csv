@@ -1,0 +1,13 @@
+model,split,hierarchy_outcome,n_rows,proportion,mean_coordinate_error,median_coordinate_error
+DL multitask,internal_validation,both_correct,3733,0.9691069574247144,9.234240025977073,7.709758423703835
+DL multitask,internal_validation,building_correct_floor_wrong,116,0.030114226375908618,14.009321405571118,11.691473035650361
+DL multitask,internal_validation,building_wrong_floor_correct,0,0.0,,
+DL multitask,internal_validation,both_wrong,3,0.000778816199376947,156.0751236869609,165.87849978150422
+DL multitask,heldout_validation,both_correct,995,0.8955895589558955,11.109483568719343,8.918825826834807
+DL multitask,heldout_validation,building_correct_floor_wrong,115,0.1035103510351035,19.657377102617733,17.84660588173369
+DL multitask,heldout_validation,building_wrong_floor_correct,0,0.0,,
+DL multitask,heldout_validation,both_wrong,1,0.0009000900090009,19.120144078941287,19.120144078941287
+AML Random Forest,heldout_validation,both_correct,986,0.8874887488748875,10.004770439397802,6.936435995632733
+AML Random Forest,heldout_validation,building_correct_floor_wrong,122,0.10981098109810981,23.27038894695669,15.192995476138623
+AML Random Forest,heldout_validation,building_wrong_floor_correct,2,0.0018001800180018,44.30942249302132,44.30942249302132
+AML Random Forest,heldout_validation,both_wrong,1,0.0009000900090009,77.03707314906673,77.03707314906673

@@ -1,0 +1,4 @@
+model,task,class,support,precision,recall,f1
+DL multitask,building,0,536,1.0,1.0,1.0
+DL multitask,building,1,307,1.0,0.996742671009772,0.99836867862969
+DL multitask,building,2,268,0.9962825278810409,1.0,0.9981378026070763

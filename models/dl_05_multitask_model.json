@@ -1,0 +1,53 @@
+{
+ "experiment": "multitask",
+ "tasks": [
+  "building",
+  "floor",
+  "coordinate"
+ ],
+ "checkpoint": "models/dl_05_multitask_model.pt",
+ "checkpoint_sha256": "5f5df5088f8de05c07fbea3744a5854e2a526bf0e94c74d21125cde820cc4761",
+ "selected_epoch": 48,
+ "epochs_run": 63,
+ "best_internal_validation_loss": 0.3779266151993198,
+ "selection_rule": "minimum internal-validation weighted loss; early stopping patience 15; held-out partition not used",
+ "n_parameters": 765834,
+ "training_seconds": 60.1,
+ "device": "cpu",
+ "torch_version": "2.15.0+cu132",
+ "python_version": "3.13.18",
+ "platform": "Linux-6.18.44-fc-v378-x86_64-with-glibc2.39",
+ "train_rows": 16085,
+ "validation_rows": 3852,
+ "config": {
+  "tasks": [
+   "building",
+   "floor",
+   "coordinate"
+  ],
+  "hidden_sizes": [
+   512,
+   256
+  ],
+  "head_hidden": 128,
+  "input_dropout": 0.2,
+  "dropout": 0.3,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "batch_size": 256,
+  "max_epochs": 150,
+  "patience": 15,
+  "lr_patience": 5,
+  "lr_factor": 0.5,
+  "min_delta": 0.0001,
+  "loss_weights": {
+   "building": 1.0,
+   "floor": 1.0,
+   "coordinate": 1.0
+  },
+  "coord_scale": 10.0,
+  "huber_delta": 1.0,
+  "class_weighting": false,
+  "seed": 42
+ }
+}

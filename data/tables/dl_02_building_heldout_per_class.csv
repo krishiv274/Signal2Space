@@ -1,0 +1,4 @@
+model,task,class,support,precision,recall,f1
+DL building_only,building,0,536,1.0,0.996268656716418,0.9981308411214954
+DL building_only,building,1,307,0.9935275080906149,1.0,0.9967532467532468
+DL building_only,building,2,268,1.0,1.0,1.0

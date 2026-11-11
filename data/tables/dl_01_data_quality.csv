@@ -1,0 +1,3 @@
+partition,rows,duplicate_raw_rows,rows_with_zero_detected_waps,missing_signal_fraction,median_detected_waps,waps_never_detected
+trainingData,19937,637,76,0.965394550526466,17.0,55
+validationData,1111,0,0,0.9683168316831683,15.0,153

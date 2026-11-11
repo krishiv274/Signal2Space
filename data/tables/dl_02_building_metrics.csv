@@ -1,0 +1,3 @@
+model,experiment,split,task,n_rows,selected_epoch,checkpoint_sha256,accuracy,macro_f1,balanced_accuracy,n_correct
+DL building_only,building_only,internal_validation,building,3852,13,0b378063c94d,0.9992211838006231,0.9992467634196345,0.9994068801897983,3849
+DL building_only,building_only,heldout_validation,building,1111,13,0b378063c94d,0.9981998199819982,0.9982946959582474,0.9987562189054726,1109

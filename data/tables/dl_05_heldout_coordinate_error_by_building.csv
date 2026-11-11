@@ -1,0 +1,4 @@
+model,building,n_rows,mean_euclidean_error,median_euclidean_error
+DL multitask,0,536,10.27578309677193,8.316035356714899
+DL multitask,1,307,14.527096401836836,12.320284907167048
+DL multitask,2,268,12.559762412395758,9.63281450928845

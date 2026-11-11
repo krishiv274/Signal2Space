@@ -1,0 +1,19 @@
+model,experiment,split,task,n_rows,selected_epoch,checkpoint_sha256,accuracy,macro_f1,balanced_accuracy,n_correct,mae_longitude,mae_latitude,mean_euclidean_error,median_euclidean_error,p75_euclidean_error,p90_euclidean_error,rmse_euclidean,coordinate_unit
+AML Random Forest,aml_baseline,heldout_validation,building,1111,,,0.9972997299729973,0.9971260556181184,0.9972065567925843,1108.0,,,,,,,,
+DL building_only,building_only,heldout_validation,building,1111,13.0,0b378063c94d,0.9981998199819982,0.9982946959582474,0.9987562189054726,1109.0,,,,,,,,
+DL multitask,multitask,heldout_validation,building,1111,48.0,5f5df5088f8d,0.9990999099909991,0.9988354937455887,0.998914223669924,1110.0,,,,,,,,
+AML Random Forest,aml_baseline,heldout_validation,coordinate,1111,,,,,,,8.096593750016032,6.806425543843151,11.58357067768045,7.488385035689113,13.675160412277961,24.38923346894561,17.671926954888807,dataset coordinate units (EPSG:3857 metres per ML_04; CRS unconfirmed)
+DL coordinate_only,coordinate_only,heldout_validation,coordinate,1111,100.0,2a084ffda258,,,,,7.244834001036997,6.107437032514648,10.506598810419208,8.134836192832871,14.12948634062533,21.347051806304098,13.456973590600787,dataset coordinate units (EPSG:3857 metres per ML_04; CRS unconfirmed)
+DL multitask,multitask,heldout_validation,coordinate,1111,48.0,5f5df5088f8d,,,,,8.617620029412686,6.718900966748065,12.001489344514605,9.528590788775142,15.649682711100503,23.705865340745838,15.018826056972589,dataset coordinate units (EPSG:3857 metres per ML_04; CRS unconfirmed)
+AML Random Forest,aml_baseline,heldout_validation,floor,1111,,,0.8892889288928892,0.8726553528255208,0.8630826765573687,988.0,,,,,,,,
+DL floor_only,floor_only,heldout_validation,floor,1111,43.0,b5e3dc0536dc,0.8991899189918992,0.88425199137171,0.8783386624015899,999.0,,,,,,,,
+DL multitask,multitask,heldout_validation,floor,1111,48.0,5f5df5088f8d,0.8955895589558955,0.8815311850173657,0.8700145347888165,995.0,,,,,,,,
+AML Random Forest,aml_baseline,internal_validation,building,3852,,,0.9994807892004154,0.99949743956304,0.9993906154783669,3850.0,,,,,,,,
+DL building_only,building_only,internal_validation,building,3852,13.0,0b378063c94d,0.9992211838006231,0.9992467634196345,0.9994068801897983,3849.0,,,,,,,,
+DL multitask,multitask,internal_validation,building,3852,48.0,5f5df5088f8d,0.9992211838006231,0.9992467634196345,0.9994068801897983,3849.0,,,,,,,,
+AML Random Forest,aml_baseline,internal_validation,coordinate,3852,,,,,,,5.914233881582707,5.060706429395763,8.578615765935266,6.306672414660506,11.091728362187041,17.376462813612893,11.934071567797043,dataset coordinate units (EPSG:3857 metres per ML_04; CRS unconfirmed)
+DL coordinate_only,coordinate_only,internal_validation,coordinate,3852,100.0,2a084ffda258,,,,,6.04873524412534,4.707826828372279,8.445647926137596,6.788957003315242,10.692184376592355,15.929308814934652,11.463121664403316,dataset coordinate units (EPSG:3857 metres per ML_04; CRS unconfirmed)
+DL multitask,multitask,internal_validation,coordinate,3852,48.0,5f5df5088f8d,,,,,7.165717183485942,4.87555592300792,9.492399966531554,7.838229229890468,12.219877518110263,17.581631725890546,12.46704332894618,dataset coordinate units (EPSG:3857 metres per ML_04; CRS unconfirmed)
+AML Random Forest,aml_baseline,internal_validation,floor,3852,,,0.9641744548286605,0.9678247915518107,0.9672699123366462,3714.0,,,,,,,,
+DL floor_only,floor_only,internal_validation,floor,3852,43.0,b5e3dc0536dc,0.9737798546209762,0.9750097893404694,0.9742747516630017,3751.0,,,,,,,,
+DL multitask,multitask,internal_validation,floor,3852,48.0,5f5df5088f8d,0.9691069574247144,0.9709314423416979,0.9699466047310995,3733.0,,,,,,,,
