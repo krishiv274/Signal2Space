@@ -1,4 +1,4 @@
-# Exact dependency lock for the active AML notebooks.
+# Exact dependency lock for the AML and DL notebooks.
 # Captured from the verified Python 3.14.2 macOS environment.
 # Direct project/runtime requirements:
 ipykernel==7.4.0
@@ -9,6 +9,12 @@ numpy==2.5.4
 pandas==3.0.6
 scikit-learn==1.9.1
 seaborn==0.13.2
+
+# Phase 2 deep learning (CPU build is sufficient; tested with torch 2.15.0 on Python 3.13):
+torch==2.15.0
+
+# Optional test runner for tests/ (maintainers run it centrally on each PR):
+pytest==9.2.0
 
 # Locked transitive dependencies for the direct requirements above:
 anyio==4.15.1
