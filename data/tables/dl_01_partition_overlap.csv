@@ -1,0 +1,3 @@
+comparison,rows,rows_with_identical_fingerprint_in_internal_train,duplicate_fingerprints_within_split,rows_with_exact_position_in_internal_train,distinct_positions,zero_detected_ap_rows
+internal_train vs internal_validation,3852,156,156,1428,174,5
+internal_train vs heldout_validation,1111,0,5,26,1044,0

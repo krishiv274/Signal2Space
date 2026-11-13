@@ -1,0 +1,14 @@
+check
+internal_train: all 1046 feature columns and targets/metadata present
+"internal_train: 16085 rows, unique ROW_ID, SOURCE_PARTITION=trainingData"
+"internal_train: finite predictors, binary indicators, complete targets"
+internal_validation: all 1046 feature columns and targets/metadata present
+"internal_validation: 3852 rows, unique ROW_ID, SOURCE_PARTITION=trainingData"
+"internal_validation: finite predictors, binary indicators, complete targets"
+"internal splits: disjoint ROW_IDs and disjoint (BUILDINGID, FLOOR, SPACEID) groups"
+AML RSSI scaler verified as fitted on internal-training observations (per-WAP mean ~ 0)
+"raw rebuild: GroupShuffleSplit(test_size=0.20, random_state=42) reproduces 16085 / 3852 rows and targets match trainingData.csv"
+heldout_validation: all 1046 feature columns and targets/metadata present
+"heldout_validation: 1111 rows, unique ROW_ID, SOURCE_PARTITION=validationData"
+"heldout_validation: finite predictors, binary indicators, complete targets"
+heldout_validation: all building/floor labels exist in the internal-train mappings

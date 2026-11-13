@@ -1,0 +1,14 @@
+item,value
+fit_split,internal_train
+fit_rows,16085
+n_features,1046
+rssi_features,520
+seen_indicators,520
+summary_features,6
+building_classes,"[0, 1, 2]"
+floor_classes,"[0, 1, 2, 3, 4]"
+coord_mean_longitude,-7463.031087313003
+coord_mean_latitude,4864869.91068559
+coord_std_longitude,123.72303017217146
+coord_std_latitude,66.93526644584831
+centroid_baseline_mean_euclidean_internal_val,125.87174767913241
