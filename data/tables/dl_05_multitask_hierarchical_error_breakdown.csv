@@ -1,0 +1,9 @@
+split,hierarchy_outcome,n_rows,proportion,mean_coordinate_error,median_coordinate_error,coordinate_unit
+internal_validation,both_correct,3770,0.9787123572170301,10.070871849972386,9.20879449679198,dataset coordinate units
+internal_validation,building_correct_floor_wrong,79,0.02050882658359294,14.986198394625138,13.88186610591059,dataset coordinate units
+internal_validation,building_wrong_floor_correct,0,0.0,,,dataset coordinate units
+internal_validation,both_wrong,3,0.000778816199376947,150.47189819178078,159.71630816267447,dataset coordinate units
+heldout_validation,both_correct,1007,0.9063906390639064,11.26541932018973,9.267211306395236,dataset coordinate units
+heldout_validation,building_correct_floor_wrong,103,0.0927092709270927,17.879330690963904,14.593843657371584,dataset coordinate units
+heldout_validation,building_wrong_floor_correct,0,0.0,,,dataset coordinate units
+heldout_validation,both_wrong,1,0.0009000900090009,11.743644243620158,11.743644243620158,dataset coordinate units

@@ -1,0 +1,9 @@
+split,model,config,n_rows,task,accuracy,macro_f1,coordinate_unit,mae_longitude,mae_latitude,mean_euclidean_error,median_euclidean_error,p75_euclidean_error,p95_euclidean_error
+internal_validation,DL multitask,mt_512x256_d30_coordx2,3852,building,0.9992211838006231,0.9992467634196345,,,,,,,
+internal_validation,DL multitask,mt_512x256_d30_coordx2,3852,floor,0.9787123572170301,0.9795286266722432,,,,,,,
+internal_validation,DL multitask,mt_512x256_d30_coordx2,3852,coordinate,,,dataset coordinate units,8.134588753768167,4.980520889379649,10.28102602340255,9.253705309531515,13.026131842133205,21.510082953890628
+internal_validation,DL multitask,mt_512x256_d30_coordx2,3852,building_and_floor,0.9787123572170301,,,,,,,,
+heldout_validation,DL multitask,mt_512x256_d30_coordx2,1111,building,0.9990999099909991,0.9988354937455887,,,,,,,
+heldout_validation,DL multitask,mt_512x256_d30_coordx2,1111,floor,0.9063906390639064,0.8934910370504758,,,,,,,
+heldout_validation,DL multitask,mt_512x256_d30_coordx2,1111,coordinate,,,dataset coordinate units,8.553763641823517,6.650163286119954,11.879020666826246,9.801745281411216,15.53956635442085,28.238455150727365
+heldout_validation,DL multitask,mt_512x256_d30_coordx2,1111,building_and_floor,0.9063906390639064,,,,,,,,

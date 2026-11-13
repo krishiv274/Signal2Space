@@ -2,162 +2,180 @@
 
 ## Indoor positioning with Wi-Fi signals
 
-Signal2Space predicts a device's building, floor, and two-dimensional position from Wi-Fi access point signal strength. The active implementation is the Phase 1 AML pipeline using shared feature preparation, Random Forest classification, coordinate regression, and integrated evaluation. Phase 2 deep learning is planned; its notebooks are placeholders and have not been implemented.
+Signal2Space predicts a device's **building**, **floor** and **two-dimensional position** from the signal strengths of the Wi-Fi access points it can hear (its *Wi-Fi fingerprint*). It has two phases on the same data, split and features:
+
+1. **AML:** Random Forest models for building, floor and coordinates.
+2. **DL:** a shared-trunk multitask neural network with building, floor and coordinate heads, plus single-task neural ablations, compared row-for-row with AML.
 
 ## Current status
 
-- **Machine Learning:** Implemented and rerun end to end. Processed datasets, model result tables, and figures are kept separately under `data/processed/`, `data/tables/`, and `data/figures/`.
-- **Current held-out results:** Building accuracy 99.73%; floor accuracy 88.93%; coordinate MAE 8.10 longitude-axis units and 6.81 latitude-axis units; mean Euclidean error 11.58 coordinate units. The coordinate notebook labels these units as EPSG:3857 metres, but the repository does not include authoritative CRS metadata; confirm the coordinate reference before treating that label as formally established.
-- **Interpretation:** Results use the supplied UJIIndoorLoc train/validation partition and an internal group split. Fingerprint overlap and repeated coordinate values may occur across partitions, so these scores do not establish performance on unseen fingerprints or unseen positions.
-- **Deep learning:** Planned.
+- **Machine learning (Phase 1):** implemented and rerun end to end (`Machine Learning Pipeline/ML_01`–`ML_05`).
+- **Deep learning (Phase 2):** implemented, executed and evaluated (`src/signal2space_dl/`, `Deep Learning Pipeline/DL_01`–`DL_05`, `tests/`).
+- **Held-out headline:**
+  - The DL multitask model reaches 90.64% floor accuracy vs 88.93% for AML (paired McNemar p = 0.014), with building accuracy 99.91% vs 99.73%.
+  - Its mean coordinate error (11.88) is statistically indistinguishable from AML (11.58).
+  - The single-task DL coordinate network has the lowest coordinate error (9.84).
+- **Units:** coordinate errors are in **dataset coordinate units**. ML_04 labels them EPSG:3857 metres, but the repository has no authoritative CRS metadata, so they are not verified ground metres.
+- **Scope:** scores describe the supplied UJIIndoorLoc partition. The held-out file was collected about three months after training, mostly with unseen phones, in the same three buildings.
 
-The dataset contains 19,937 training/reference records and 1,111 validation/test records. It has 520 WAP signal fields; `100` means the access point was not detected. [UCI UJIIndoorLoc dataset documentation](https://archive.ics.uci.edu/dataset/310/ujiindoorloc)
+Detailed documentation:
+- [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md): data, features, AML pipeline, verified AML results, limitations.
+- [`docs/DL_PIPELINE.md`](docs/DL_PIPELINE.md): DL architecture, training, selection, results, comparison.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md): team workflow (PR-only `main`).
 
-## Project Structure
+## Data
+
+UJIIndoorLoc ([UCI dataset documentation](https://archive.ics.uci.edu/dataset/310/ujiindoorloc)):
+- `data/raw/trainingData.csv`: 19,937 rows.
+- `data/raw/validationData.csv`: 1,111 rows, used as the held-out test partition.
+
+Each row has 520 WAP columns holding RSSI values in dBm (−104 to 0); the value **`100` means "not detected"**. The targets are `BUILDINGID` (0–2), `FLOOR` (0–4) and `LONGITUDE`/`LATITUDE` (projected values). The metadata columns (`SPACEID`, `RELATIVEPOSITION`, `USERID`, `PHONEID`, `TIMESTAMP`) are never model inputs.
+
+| Partition | Rows | Role |
+|---|---:|---|
+| internal training | 16,085 | fit scalers and models |
+| internal validation | 3,852 | choose hyperparameters / early stopping (grouped by building, floor, space) |
+| held-out (`validationData.csv`) | 1,111 | evaluated once, after the configuration is frozen |
+
+**Shared features (ML_01, used by both phases):** 1,046 predictors in total.
+- 520 per-WAP RSSI values standardised on internal training (undetected values imputed from train-only statistics).
+- 520 detected/not-detected indicators.
+- 6 signal summaries: number heard, strongest, mean and standard deviation of RSSI, number of strong signals, strongest-AP index.
+
+## Project structure
 
 ```mermaid
 flowchart TB
     A["Signal2Space/"]
-
-    A --> B["Machine Learning Pipeline/"]
-    B --> B1["ML_01_data_preparation_features.ipynb"]
-    B1 --> B2["ML_02_building_classification.ipynb"]
-    B2 --> B3["ML_03_floor_classification.ipynb"]
-    B3 --> B4["ML_04_coordinate_regression.ipynb"]
-    B4 --> B5["ML_05_integration_evaluation.ipynb"]
-
-    A --> C["Deep Learning Pipeline/<br/>Planned - Placeholder Notebooks"]
-    C --> C1["DL_01_data_preparation.ipynb"]
-    C1 --> C2["DL_02_building_prediction.ipynb"]
-    C2 --> C3["DL_03_floor_prediction.ipynb"]
-    C3 --> C4["DL_04_coordinate_prediction.ipynb"]
-    C4 --> C5["DL_05_multitask_integration_evaluation.ipynb"]
-
+    A --> B["Machine Learning Pipeline/<br/>ML_01 … ML_05 (Random Forest)"]
+    A --> C["Deep Learning Pipeline/<br/>DL_01 data · DL_02 building · DL_03 floor<br/>DL_04 coordinates · DL_05 multitask + comparison"]
+    A --> S["src/signal2space_dl/<br/>config · data · model · train · evaluate · plots · pipeline · multitask"]
+    A --> T["tests/"]
+    A --> M["models/dl/<br/>checkpoints + selected configs + preprocessor"]
     A --> D["data/"]
     D --> D1["raw/"]
-    D1 --> D11["trainingData.csv"]
-    D1 --> D12["validationData.csv"]
-
-    D --> D2["processed/"]
-    D2 --> D21["Canonical train/validation feature tables"]
-
-    D --> D3["tables/"]
-    D3 --> D31["Predictions, metrics, confusion data"]
-
-    D --> D4["figures/"]
-    D4 --> D41["EDA and report figures"]
-
-    A --> E["README.md"]
-    A --> F["requirements.txt<br/>AML/Runtime Lock"]
-
-    class A root
-    class B,B1,B2,B3,B4,B5 ml
-    class C,C1,C2,C3,C4,C5 dl
-    class D,D1,D2,D3,D4 data
-    class D11,D12,D21,D31,D41,E,F files
+    D --> D2["processed/ (shared AML feature tables)"]
+    D --> D3["tables/ (ml_0x_*, dl_0x_* results)"]
+    D --> D4["figures/ (ml_0x_*, dl_0x_* figures)"]
+    A --> R["docs/ · reports/ · README.md · CONTRIBUTING.md · requirements.txt"]
 ```
 
-## Machine Learning Flow
-
-This diagram shows the data and model flow, not the notebook sequence.
+## Machine learning flow (Phase 1)
 
 ```mermaid
 flowchart TD
-    A[trainingData.csv] --> B[Validate schema and inspect data quality]
-    B --> C[Group split by building, floor, and space<br/>80 percent train / 20 percent internal validation]
-    C --> D[Internal training split]
-    C --> E[Internal validation split]
-    F[validationData.csv<br/>supplied held-out test partition] --> I[Transform each split with the fitted scaler<br/>RSSI, detection indicators, signal summaries]
-    D --> G[Fit RSSI scaler on internal training only]
-    D --> I
-    E --> I
-    G --> I
-    I --> J[Internal-training features]
-    I --> K[Internal-validation features]
-    I --> L[Held-out features]
-    J --> M[Fit candidate Random Forest models<br/>building, floor, coordinate regression]
-    M --> N[Select hyperparameters using internal validation]
-    K --> N
-    N --> O[Freeze selected configurations]
-    O --> P[Evaluate frozen models on held-out features]
-    L --> P
-    P --> Q[Join predictions by source partition and row ID]
-    Q --> R[Accuracy, macro F1, coordinate MAE]
-    Q --> S[Confusion matrices, coordinate errors,<br/>hierarchical building/floor analysis]
+    A[trainingData.csv] --> B[Validate schema and data quality]
+    B --> C[Group split by building, floor, space<br/>80% internal train / 20% internal validation]
+    C --> D[Fit RSSI scaler on internal training only]
+    D --> E[1,046 features for every split]
+    F[validationData.csv held out] --> E
+    E --> G[Random Forest per task<br/>building · floor · coordinates]
+    G --> H[Select hyperparameters on internal validation]
+    H --> I[Freeze, then evaluate once on held-out]
+    I --> J[ML_05: join on SOURCE_PARTITION + ROW_ID<br/>metrics, confusion, hierarchical analysis]
 ```
 
-## ML notebook walkthrough
+| Notebook | What it does |
+|---|---|
+| ML_01 | schema/quality checks, EDA, grouped split, train-only scaling, 1,046 features → `data/processed/` |
+| ML_02 | building Random Forest (selected by internal-validation accuracy) |
+| ML_03 | floor Random Forest, class-balanced (selected by internal-validation accuracy) |
+| ML_04 | multi-output coordinate Random Forest (selected by internal-validation mean Euclidean error) |
+| ML_05 | integrates the three tasks, recomputes metrics, hierarchical building/floor analysis |
 
-The notebooks run in numeric order. ML_01 creates the shared, leakage-aware data preparation used by the three task notebooks. ML_02 through ML_04 tune and evaluate separate models for the three targets. ML_05 checks and combines their predictions. The supplied `validationData.csv` remains held out until each model configuration is selected using the internal validation split.
+## Deep learning flow (Phase 2)
 
-### ML_01 — Prepare data and engineer features
+```mermaid
+flowchart TD
+    A[ML_01 feature tables] --> B[DL_01: verify contract and split<br/>fit summary/coordinate scalers + label maps on internal training]
+    B --> C[Shared trunk: Linear-BatchNorm-ReLU-Dropout layers]
+    C --> H1[building head]
+    C --> H2[floor head]
+    C --> H3[coordinate head]
+    H1 & H2 & H3 --> L[Loss: CE building + CE floor + w·SmoothL1 coords]
+    L --> S[7 candidates, early stopping and selection<br/>on internal validation only]
+    S --> F[Save config and weights, then evaluate once on held-out]
+    F --> E[DL_05: AML vs DL on identical rows, confusion, error maps,<br/>hierarchical analysis, seed variability, phone robustness]
+    B --> X[DL_02–DL_04: single-task ablations, same trunk family, one head each]
+    X --> E
+```
 
-`ML_01_data_preparation_features.ipynb` loads the supplied training and validation CSVs, checks their schema and data quality, and explores the signal and target fields. It treats RSSI value `100` as an undetected access point. The training partition is divided into internal training and validation groups using building, floor, and space, so records for a group stay together. The supplied validation partition is preserved for final evaluation.
+The selected multitask model has a 512→256 trunk with dropout 0.3, 128-unit heads and loss weights building 1, floor 1, coordinates 2 (Smooth-L1, β = 0.1). It was trained with AdamW and early stopping at epoch 25, and has 768,906 parameters. Details are in [`docs/DL_PIPELINE.md`](docs/DL_PIPELINE.md).
 
-The notebook fits RSSI scaling values on internal training data only, then applies that fitted transformation to all splits. It creates 520 scaled RSSI features, 520 signal-presence indicators, and six signal-summary features: number detected, strongest, mean and standard deviation of observed RSSI, number above the strong-signal threshold, and strongest access-point index. Target and identifying metadata are retained for evaluation but excluded from model predictors. The notebook writes the internal-training, internal-validation, and held-out feature tables to `data/processed/` and saves EDA plots to `data/figures/`.
+## Results (held-out, 1,111 identical rows for every model)
 
-### ML_02 — Classify the building
+| Metric | AML Random Forest | DL multitask | DL single-task (3 separate nets) |
+|---|---:|---:|---:|
+| Building accuracy / macro-F1 | 99.73% / 99.71% | **99.91% / 99.88%** | 99.73% / 99.68% |
+| Floor accuracy / macro-F1 | 88.93% / 87.27% | **90.64% / 89.35%** | 90.28% / 89.17% |
+| Joint building + floor correct | 88.75% (986) | **90.64% (1,007)** | — |
+| Coordinate MAE, longitude / latitude axis | 8.10 / 6.81 | 8.55 / 6.65 | **6.76 / 5.83** |
+| Mean / median Euclidean error | 11.58 / **7.49** | 11.88 / 9.80 | **9.84** / 7.59 |
 
-`ML_02_building_classification.ipynb` reads the three shared feature tables and trains a Random Forest building classifier. It selects its configuration using the internal validation split, then evaluates the selected configuration once on the supplied held-out partition. It excludes target and metadata columns from predictors. Predictions, metrics, tuning results, and confusion-matrix data are saved under `data/tables/`; the held-out confusion-matrix figure is saved under `data/figures/`.
+Coordinate values are in dataset coordinate units. Sources: `data/tables/ml_05_aml_summary_metrics.csv` and `data/tables/dl_05_multitask_aml_vs_dl_comparison.csv`. On paired rows:
+- the DL floor improvement is significant (37 vs 18 discordant rows, p = 0.014);
+- the coordinate mean difference is not (DL − AML = +0.30, 95% CI −0.42 to +1.02).
 
-### ML_03 — Classify the floor
+Across three training seeds of the frozen multitask configuration, floor accuracy is 90.13% ± 0.50 pp and mean Euclidean error is 12.07 ± 0.28.
 
-`ML_03_floor_classification.ipynb` uses the same prepared features and partitions to train a Random Forest floor classifier. Floor classes are encoded from the internal-training labels and that mapping is used consistently for validation and held-out predictions. Hyperparameter selection uses internal validation; final scores and the floor confusion matrix use the held-out partition. Prediction and evaluation tables are saved under `data/tables/`, and the confusion-matrix figure under `data/figures/`.
+**Reading the comparison:**
+- Building prediction is at ceiling for every model.
+- The shared trunk gives the best floor classifier and the best joint building/floor accuracy. Its coordinate error also degrades less when the floor is wrong (17.9 vs 23.3 for AML).
+- Sharing the trunk costs coordinate precision: a dedicated coordinate network is best for position.
 
-### ML_04 — Regress the coordinates
+## Figures
 
-`ML_04_coordinate_regression.ipynb` trains a multi-output Random Forest regressor for longitude and latitude using the shared features. Its predictor allowlist excludes the coordinate targets and identifying metadata. Candidate settings are compared on internal validation using Euclidean coordinate error, and the selected configuration is evaluated on the held-out partition. The notebook records per-axis MAE and Euclidean error, writes predictions and tuning/evaluation tables to `data/tables/`, and saves actual-versus-predicted, displacement, and error visualizations to `data/figures/`. The notebook describes coordinate errors in metres based on an EPSG:3857 assumption; the repository does not provide authoritative CRS metadata to independently confirm that unit interpretation.
+### Held-out metrics: AML vs DL
 
-### ML_05 — Integrate and evaluate the tasks
+![Held-out metric comparison](data/figures/dl_05_multitask_heldout_metric_comparison.png)
 
-`ML_05_integration_evaluation.ipynb` reads the task predictions and source feature tables, aligns rows using source partition and row ID, checks target alignment, and recomputes the task metrics. It then reports the combined building-and-floor correctness and breaks coordinate error down by hierarchical classification outcome. Integrated predictions, summaries, confusion data, and hierarchy tables are written to `data/tables/`; combined confusion matrices, metric comparisons, coordinate errors, and hierarchical analysis figures are saved to `data/figures/`.
+### Held-out floor confusion matrices (DL multitask vs AML)
 
-The held-out rows may share Wi-Fi fingerprints or repeated two-dimensional coordinates with other partitions. The results therefore describe performance under the supplied partition; evaluating unseen fingerprints or unseen positions would require a split designed specifically for that research question.
+![Floor confusion matrices](data/figures/dl_05_multitask_heldout_floor_confusion_dl_vs_aml.png)
 
-## Selected results
+### Coordinate error map (DL multitask, held-out)
 
-| Task | Held-out result |
-|---|---:|
-| Building classification | Accuracy **99.73%**; macro F1 **99.71%** |
-| Floor classification | Accuracy **88.93%**; macro F1 **87.27%** |
-| Coordinate regression | Longitude-axis MAE **8.10**; latitude-axis MAE **6.81**; mean Euclidean error **11.58** (notebook reports metres) |
-| Joint building and floor correctness | **986 / 1,111** held-out rows (**88.75%**) |
+![Coordinate error map](data/figures/dl_05_multitask_heldout_error_map.png)
 
-These scores are specific to the supplied split. The dataset partition does not guarantee that fingerprints or two-dimensional coordinates are unique across train and evaluation data.
+### Hierarchical building/floor error analysis
 
-## Report figures
+![Hierarchical error analysis](data/figures/dl_05_multitask_hierarchical_dl_vs_aml.png)
 
-### Held-out building and floor confusion matrices
+### AML baseline figures
 
-![Held-out building and floor confusion matrices](data/figures/ml_05_heldout_confusion_matrices.png)
+![AML held-out confusion matrices](data/figures/ml_05_heldout_confusion_matrices.png)
 
-### Coordinate error distribution and spatial error
+![AML coordinate errors](data/figures/ml_05_coordinate_error_visualizations.png)
 
-![Coordinate error distribution and spatial coordinate error](data/figures/ml_05_coordinate_error_visualizations.png)
+## How to run
 
-### Hierarchical building/floor correctness
-
-![Hierarchical correctness breakdown](data/figures/ml_05_hierarchical_error_breakdown.png)
-
-## Data files
-
-Place the supplied `trainingData.csv` and `validationData.csv` files in `data/raw/`.
-
-- `data/processed/`: the three canonical feature tables written by ML_01.
-- `data/tables/`: task predictions, tuning results, metrics, confusion-matrix data, and integrated evaluation outputs written by ML_02 through ML_05.
-- `data/figures/`: selected EDA, classification, coordinate, and integrated evaluation figures.
-
-Run the AML notebooks in numeric order from `Machine Learning Pipeline/`. ML_01 prepares the shared splits and features; ML_02, ML_03, and ML_04 produce task-specific predictions; ML_05 integrates and checks those outputs.
-
-## Environment
-
-The lock targets the verified Python 3.14.2 environment. Create and activate a virtual environment, then install the pinned dependencies:
+The dependency lock was captured for the AML notebooks on Python 3.14.2 (macOS). The DL pipeline was verified on Python 3.13 with torch 2.15.0 (CPU) and the same major library versions. Create an environment and install the pinned dependencies (PyTorch's CPU build is enough):
 
 ```bash
-python3.14 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-jupyter notebook
 ```
 
-The lock includes packages required by the active AML notebooks and Jupyter execution. XGBoost and PyTorch are not included because the current AML implementation does not use them. Add Phase 2 dependencies when the DL pipeline is implemented.
+1. **AML:** run `Machine Learning Pipeline/ML_01` … `ML_05` in order in Jupyter (`jupyter notebook`). ML_01 must run before anything else, because DL reuses its feature tables.
+2. **DL:** run `Deep Learning Pipeline/DL_01` … `DL_05` in order, or run everything from the command line (about 18 minutes on a 4-core CPU):
+
+   ```bash
+   PYTHONPATH=src python -m signal2space_dl.pipeline --stage all
+   ```
+
+3. **Tests:**
+
+   ```bash
+   PYTHONPATH=src python -m pytest -q tests
+   ```
+
+A quick smoke run (`--quick`) writes only to the git-ignored `outputs_smoke/` folder. Its numbers are not results.
+
+## Limitations
+
+- The coordinate CRS is unverified, so errors are given in dataset units, not metres.
+- Results describe the supplied partition only. The held-out file shares no identical fingerprints with training and only 29 exact positions, but it covers the same buildings.
+- Internal validation shares users, phones, time period, 156 identical fingerprints and many exact positions with internal training, so internal scores are optimistic.
+- Held-out `USERID` is a placeholder, and 9 of 11 held-out phones never appear in training. Phone-level robustness numbers are descriptive only.
+- The DL selection grids are deliberately small so that they run on a CPU.
