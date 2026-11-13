@@ -1,0 +1,26 @@
+{
+  "name": "mt_512x256_d30_coordx2",
+  "hidden_sizes": [
+    512,
+    256
+  ],
+  "head_hidden": 128,
+  "dropout": 0.3,
+  "input_dropout": 0.1,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "batch_size": 256,
+  "max_epochs": 150,
+  "patience": 15,
+  "w_building": 1.0,
+  "w_floor": 1.0,
+  "w_coord": 2.0,
+  "coord_beta": 0.1,
+  "tasks": [
+    "building",
+    "floor",
+    "coord"
+  ],
+  "seed": 42,
+  "selection_coord_norm": 125.87174767913241
+}
