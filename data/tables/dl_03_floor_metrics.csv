@@ -1,0 +1,3 @@
+split,model,config,n_rows,task,accuracy,macro_f1
+internal_validation,DL single-task floor,floor_1024x512x256_d30,3852,floor,0.9818276220145379,0.9811129646988803
+heldout_validation,DL single-task floor,floor_1024x512x256_d30,1111,floor,0.9027902790279028,0.8916724809598179

@@ -1,0 +1,3 @@
+split,model,config,n_rows,task,accuracy,macro_f1
+internal_validation,DL single-task building,building_512x256_d30,3852,building,0.9994807892004154,0.99949743956304
+heldout_validation,DL single-task building,building_512x256_d30,1111,building,0.9972997299729973,0.9968189670399568

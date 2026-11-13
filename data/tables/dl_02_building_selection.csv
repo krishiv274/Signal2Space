@@ -1,0 +1,5 @@
+config,hidden_sizes,head_hidden,dropout,input_dropout,learning_rate,weight_decay,batch_size,max_epochs,patience,w_building,w_floor,w_coord,coord_beta,tasks,seed,best_epoch,epochs_run,val_selection_score,val_building_acc,val_floor_acc,val_mean_euclidean,n_parameters,train_seconds,selected
+building_512x256_d30,"[512, 256]",128,0.3,0.1,0.001,0.0001,256,150,15,1.0,1.0,1.0,0.1,['building'],42,11,26,0.0005192107995846129,0.9994807892004154,,,702211,22.8,True
+building_1024x512_d30,"[1024, 512]",128,0.3,0.1,0.001,0.0001,256,150,15,1.0,1.0,1.0,0.1,['building'],42,13,28,0.0005192107995846129,0.9994807892004154,,,1666051,37.7,False
+building_1024x512x256_d30,"[1024, 512, 256]",128,0.3,0.1,0.001,0.0001,256,150,15,1.0,1.0,1.0,0.1,['building'],42,13,28,0.0005192107995846129,0.9994807892004154,,,1765123,40.7,False
+building_512x256_d50,"[512, 256]",128,0.5,0.2,0.001,0.0001,256,150,15,1.0,1.0,1.0,0.1,['building'],42,1,16,0.0007788161993769194,0.9992211838006231,,,702211,16.2,False

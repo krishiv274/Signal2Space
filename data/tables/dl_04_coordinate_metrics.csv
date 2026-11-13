@@ -1,0 +1,3 @@
+split,model,config,n_rows,task,coordinate_unit,mae_longitude,mae_latitude,mean_euclidean_error,median_euclidean_error,p75_euclidean_error,p95_euclidean_error
+internal_validation,DL single-task coord,coord_1024x512_d30,3852,coordinate,dataset coordinate units,5.4437561752729815,4.423952739594382,7.678408795805813,5.999110539390858,9.965840277613097,18.100296566288208
+heldout_validation,DL single-task coord,coord_1024x512_d30,1111,coordinate,dataset coordinate units,6.756092037063857,5.829574049178018,9.837170579903129,7.585233489076993,12.72872791382925,24.605975363679708

@@ -1,0 +1,5 @@
+config,hidden_sizes,head_hidden,dropout,input_dropout,learning_rate,weight_decay,batch_size,max_epochs,patience,w_building,w_floor,w_coord,coord_beta,tasks,seed,best_epoch,epochs_run,val_selection_score,val_building_acc,val_floor_acc,val_mean_euclidean,n_parameters,train_seconds,selected
+floor_1024x512x256_d30,"[1024, 512, 256]",128,0.3,0.1,0.001,0.0001,256,150,15,1.0,1.0,1.0,0.1,['floor'],42,15,30,0.018172377985462118,,0.9818276220145379,,1765381,47.7,True
+floor_1024x512_d30,"[1024, 512]",128,0.3,0.1,0.001,0.0001,256,150,15,1.0,1.0,1.0,0.1,['floor'],42,15,30,0.02180685358255452,,0.9781931464174455,,1666309,42.8,False
+floor_512x256_d30,"[512, 256]",128,0.3,0.1,0.001,0.0001,256,150,15,1.0,1.0,1.0,0.1,['floor'],42,15,30,0.02336448598130836,,0.9766355140186916,,702469,27.0,False
+floor_512x256_d50,"[512, 256]",128,0.5,0.2,0.001,0.0001,256,150,15,1.0,1.0,1.0,0.1,['floor'],42,22,37,0.02466251298027,,0.97533748701973,,702469,38.7,False
