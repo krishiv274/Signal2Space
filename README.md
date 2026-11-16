@@ -7,10 +7,13 @@ Signal2Space predicts a device's **building**, **floor** and **two-dimensional p
 1. **AML:** Random Forest models for building, floor and coordinates.
 2. **DL:** a shared-trunk multitask neural network with building, floor and coordinate heads, plus single-task neural ablations, compared row-for-row with AML.
 
+An interactive **Streamlit app** shows the trained models in action: pick a real held-out scan or upload your own, watch the network predict building, floor and position live, and stress-test it by hiding access points.
+
 ## Current status
 
 - **Machine learning (Phase 1):** implemented and rerun end to end (`Machine Learning Pipeline/ML_01`–`ML_05`).
-- **Deep learning (Phase 2):** implemented, executed and evaluated (`src/signal2space_dl/`, `Deep Learning Pipeline/DL_01`–`DL_05`, `tests/`).
+- **Deep learning (Phase 2):** implemented, executed and evaluated (`src/signal2space_dl/`, `Deep Learning Pipeline/DL_01`–`DL_05`).
+- **Interactive app:** `app/streamlit_app.py` runs the saved Phase 2 networks live on held-out or uploaded scans (see [Interactive app](#interactive-app)).
 - **Held-out headline:**
   - The DL multitask model reaches 90.64% floor accuracy vs 88.93% for AML (paired McNemar p = 0.014), with building accuracy 99.91% vs 99.73%.
   - Its mean coordinate error (11.88) is statistically indistinguishable from AML (11.58).
@@ -20,8 +23,37 @@ Signal2Space predicts a device's **building**, **floor** and **two-dimensional p
 
 Detailed documentation:
 - [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md): data, features, AML pipeline, verified AML results, limitations.
-- [`docs/DL_PIPELINE.md`](docs/DL_PIPELINE.md): DL architecture, training, selection, results, comparison.
-- [`CONTRIBUTING.md`](CONTRIBUTING.md): team workflow (PR-only `main`).
+- [`docs/phase 1 (ML)/ML_Overview.md`](<docs/phase 1 (ML)/ML_Overview.md>): AML features, Random Forest selection, results and error analysis.
+- [`docs/phase 2 (DL)/DL_Overview.md`](<docs/phase 2 (DL)/DL_Overview.md>): DL architecture, training, selection, results, comparison.
+- Reports: [`reports/Phase_1_ML_Report.pdf`](reports/Phase_1_ML_Report.pdf) and [`reports/Phase_2_DL_Report.pdf`](reports/Phase_2_DL_Report.pdf); slide decks and LaTeX sources are in `docs/phase 1 (ML)/` and `docs/phase 2 (DL)/`.
+
+## Interactive app
+
+![Live prediction page of the Signal2Space app](docs/images/app_live_prediction.png)
+
+The Streamlit app in `app/` puts the project to work on real scans:
+
+| Page | What you can do |
+|---|---|
+| **Overview** | Headline held-out results for the Random Forest and the neural networks, read from `results/tables/`. |
+| **Live prediction** | Pick any of the 1,111 held-out scans (filter by building, floor or phone) or upload a CSV of your own scans. The multitask network and the coordinate network predict live, showing building and floor probabilities, the position on the building's survey map next to the true position, and the scan's Wi-Fi fingerprint. **Stress-test** the scan by hiding its strongest access points, dropping a share of them, or adding signal noise. |
+| **Results explorer** | Compare all three models: accuracy and error charts, floor confusion matrices, recall by floor, position-error maps, error distributions, training-seed and per-phone robustness. |
+| **How it works** | The 1,046 features, the shared-trunk architecture, training curves and the model-selection table. |
+
+Run it from the repository root (after installing the requirements below):
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+It opens at http://localhost:8501. It needs only files already in the repository: `data/raw/`, `models/dl/` and `results/tables/`.
+
+How the app stays faithful to the project:
+- To score a scan that is not in the saved tables (an upload or a stress-tested scan), `app/core.py` rebuilds the Phase 1 feature transform from `data/raw/trainingData.csv` with the same grouped split and train-only statistics as ML_01. `app/tests/test_core.py` checks that this reproduces the stored held-out feature table and that the app's live predictions match the saved DL predictions exactly.
+- The Phase 1 Random Forests were not saved as model files, so the app shows their saved predictions, and only for unmodified held-out scans.
+- Positions are in the dataset's recorded units, as everywhere in the project.
+
+![Results explorer page of the Signal2Space app](docs/images/app_results_explorer.png)
 
 ## Data
 
@@ -50,14 +82,15 @@ flowchart TB
     A --> B["Machine Learning Pipeline/<br/>ML_01 … ML_05 (Random Forest)"]
     A --> C["Deep Learning Pipeline/<br/>DL_01 data · DL_02 building · DL_03 floor<br/>DL_04 coordinates · DL_05 multitask + comparison"]
     A --> S["src/signal2space_dl/<br/>config · data · model · train · evaluate · plots · pipeline · multitask"]
-    A --> T["tests/"]
+    A --> P["app/<br/>Streamlit app · core.py · charts.py · views/ · tests/"]
     A --> M["models/dl/<br/>checkpoints + selected configs + preprocessor"]
     A --> D["data/"]
     D --> D1["raw/"]
     D --> D2["processed/ (shared AML feature tables)"]
-    D --> D3["tables/ (ml_0x_*, dl_0x_* results)"]
-    D --> D4["figures/ (ml_0x_*, dl_0x_* figures)"]
-    A --> R["docs/ · reports/ · README.md · CONTRIBUTING.md · requirements.txt"]
+    A --> RS["results/"]
+    RS --> R1["tables/ (ml_0x_*, dl_0x_* results)"]
+    RS --> R2["figures/ (ml_0x_*, dl_0x_* figures)"]
+    A --> R["docs/ (overview, phase 1 and phase 2 docs, decks, LaTeX) · reports/ (PDFs) · README.md · LICENSE · requirements.txt"]
 ```
 
 ## Machine learning flow (Phase 1)
@@ -100,7 +133,7 @@ flowchart TD
     X --> E
 ```
 
-The selected multitask model has a 512→256 trunk with dropout 0.3, 128-unit heads and loss weights building 1, floor 1, coordinates 2 (Smooth-L1, β = 0.1). It was trained with AdamW and early stopping at epoch 25, and has 768,906 parameters. Details are in [`docs/DL_PIPELINE.md`](docs/DL_PIPELINE.md).
+The selected multitask model has a 512→256 trunk with dropout 0.3, 128-unit heads and loss weights building 1, floor 1, coordinates 2 (Smooth-L1, β = 0.1). It was trained with AdamW and early stopping at epoch 25, and has 768,906 parameters. Details are in [`docs/phase 2 (DL)/DL_Overview.md`](<docs/phase 2 (DL)/DL_Overview.md>).
 
 ## Results (held-out, 1,111 identical rows for every model)
 
@@ -112,7 +145,7 @@ The selected multitask model has a 512→256 trunk with dropout 0.3, 128-unit he
 | Coordinate MAE, longitude / latitude axis | 8.10 / 6.81 | 8.55 / 6.65 | **6.76 / 5.83** |
 | Mean / median Euclidean error | 11.58 / **7.49** | 11.88 / 9.80 | **9.84** / 7.59 |
 
-Coordinate values are in dataset coordinate units. Sources: `data/tables/ml_05_aml_summary_metrics.csv` and `data/tables/dl_05_multitask_aml_vs_dl_comparison.csv`. On paired rows:
+Coordinate values are in dataset coordinate units. Sources: `results/tables/ml_05_aml_summary_metrics.csv` and `results/tables/dl_05_multitask_aml_vs_dl_comparison.csv`. On paired rows:
 - the DL floor improvement is significant (37 vs 18 discordant rows, p = 0.014);
 - the coordinate mean difference is not (DL − AML = +0.30, 95% CI −0.42 to +1.02).
 
@@ -127,25 +160,25 @@ Across three training seeds of the frozen multitask configuration, floor accurac
 
 ### Held-out metrics: AML vs DL
 
-![Held-out metric comparison](data/figures/dl_05_multitask_heldout_metric_comparison.png)
+![Held-out metric comparison](results/figures/dl_05_multitask_heldout_metric_comparison.png)
 
 ### Held-out floor confusion matrices (DL multitask vs AML)
 
-![Floor confusion matrices](data/figures/dl_05_multitask_heldout_floor_confusion_dl_vs_aml.png)
+![Floor confusion matrices](results/figures/dl_05_multitask_heldout_floor_confusion_dl_vs_aml.png)
 
 ### Coordinate error map (DL multitask, held-out)
 
-![Coordinate error map](data/figures/dl_05_multitask_heldout_error_map.png)
+![Coordinate error map](results/figures/dl_05_multitask_heldout_error_map.png)
 
 ### Hierarchical building/floor error analysis
 
-![Hierarchical error analysis](data/figures/dl_05_multitask_hierarchical_dl_vs_aml.png)
+![Hierarchical error analysis](results/figures/dl_05_multitask_hierarchical_dl_vs_aml.png)
 
 ### AML baseline figures
 
-![AML held-out confusion matrices](data/figures/ml_05_heldout_confusion_matrices.png)
+![AML held-out confusion matrices](results/figures/ml_05_heldout_confusion_matrices.png)
 
-![AML coordinate errors](data/figures/ml_05_coordinate_error_visualizations.png)
+![AML coordinate errors](results/figures/ml_05_coordinate_error_visualizations.png)
 
 ## How to run
 
@@ -164,10 +197,11 @@ python -m pip install -r requirements.txt
    PYTHONPATH=src python -m signal2space_dl.pipeline --stage all
    ```
 
-3. **Tests:**
+3. **App:** `streamlit run app/streamlit_app.py` (see [Interactive app](#interactive-app)).
+4. **Tests** (app transform, live predictions and every page):
 
    ```bash
-   PYTHONPATH=src python -m pytest -q tests
+   PYTHONPATH=src python -m pytest -q app/tests
    ```
 
 A quick smoke run (`--quick`) writes only to the git-ignored `outputs_smoke/` folder. Its numbers are not results.
