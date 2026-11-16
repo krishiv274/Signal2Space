@@ -13,7 +13,11 @@ seaborn==0.13.2
 # Phase 2 deep learning (CPU build is sufficient; tested with torch 2.15.0 on Python 3.13):
 torch==2.15.0
 
-# Optional test runner for tests/ (maintainers run it centrally on each PR):
+# Interactive app (app/streamlit_app.py); verified with these versions on Python 3.13:
+streamlit==1.67.0
+plotly==7.1.0
+
+# Optional test runner for app/tests (maintainers run it centrally on each PR):
 pytest==9.2.0
 
 # Locked transitive dependencies for the direct requirements above:
