@@ -34,8 +34,10 @@ PROJECT_ROOT = find_project_root()
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
-TABLES_DIR = DATA_DIR / "tables"
-FIGURES_DIR = DATA_DIR / "figures"
+# Result tables and figures live under results/ (moved from data/ in the repository refactor).
+RESULTS_DIR = PROJECT_ROOT / "results"
+TABLES_DIR = RESULTS_DIR / "tables"
+FIGURES_DIR = RESULTS_DIR / "figures"
 MODELS_DIR = PROJECT_ROOT / "models" / "dl"
 
 RAW_TRAIN_PATH = RAW_DIR / "trainingData.csv"

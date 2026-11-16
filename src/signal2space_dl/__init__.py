@@ -13,7 +13,7 @@ data      Load/validate AML feature tables and fit train-only DL transforms.
 model     Shared-trunk multitask network and loss.
 train     Training loop, early stopping and internal-validation model selection.
 evaluate  Metrics, confusion matrices, hierarchical and robustness analysis.
-plots     Figures written to ``data/figures/``.
+plots     Figures written to ``results/figures/``.
 pipeline  End-to-end command-line entry point.
 """
 
